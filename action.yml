@@ -23,6 +23,9 @@ inputs:
   email:
     description: An email for the git user creating the git commit.
     required: true
+  branch:
+    description: Specify a branch to checkout before pushing
+    required: false
 runs:
   using: docker
   image: Dockerfile

@@ -2,6 +2,8 @@
 
 ROOT=/root
 
+INPUT_BRANCH="${INPUT_BRANCH:-master}"
+
 if [[ ! -d "$ROOT/.ssh" ]]; then
     echo "$ROOT/.ssh does not exist, creating it"
     mkdir -p "$ROOT/.ssh"
@@ -31,11 +33,14 @@ rsync -vr "$INPUT_CHANGES"/ repo
 
 ts=$(date '+%Y-%m-%d %H:%M:%S')
 cd repo || exit
+
+git checkout "$INPUT_BRANCH"
+
 if [[ $(git status -s) ]]; then
     git add .
     git commit -m "auto-update - $ts"
     echo "deploying changed"
-    git push origin master
+    git push origin "$INPUT_BRANCH"
 else
     echo "no changes detected, skipping push"
 fi
