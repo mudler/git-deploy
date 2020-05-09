@@ -28,13 +28,15 @@ git config --global user.email "$INPUT_EMAIL"
 rm -rf repo && mkdir repo
 git clone "$INPUT_REPOSITORY" repo
 
+pushd repo
+    git checkout "$INPUT_BRANCH"
+popd
+
 echo "copying changes"
 rsync -vr "$INPUT_CHANGES"/ repo
 
 ts=$(date '+%Y-%m-%d %H:%M:%S')
 cd repo || exit
-
-git checkout "$INPUT_BRANCH"
 
 if [[ $(git status -s) ]]; then
     git add .
